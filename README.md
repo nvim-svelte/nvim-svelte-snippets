@@ -78,7 +78,7 @@ To develop and test the plugin locally:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/nvim-svelte/nvim-svelte-snippets ~/projects/nvim-svelte-snippets
+git clone https://github.com/nvim-svelte/nvim-svelte-snippets ~/YOUR_LOCAL_DEV_FOLDER/nvim-svelte-snippets
 ```
 
 2. Add the local plugin to your Neovim config (in your lazy.nvim plugins setup):
