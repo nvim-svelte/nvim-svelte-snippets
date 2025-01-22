@@ -14,7 +14,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-    "nvim-svelte/svelte-snippets.nvim",
+    "nvim-svelte/nvim-svelte-snippets",
     dependencies = "L3MON4D3/LuaSnip",
     opts = {}
 }
@@ -27,14 +27,14 @@ To develop and test the plugin locally:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/nvim-svelte/svelte-snippets.nvim ~/projects/svelte-snippets.nvim
+git clone https://github.com/nvim-svelte/nvim-svelte-snippets ~/projects/nvim-svelte-snippets
 ```
 
 2. Add the local plugin to your Neovim config (in your lazy.nvim plugins setup):
 
 ```lua
 {
-    dir = "~/YOUR_LOCAL_DEV_FOLDER/svelte-snippets.nvim",
+    dir = "~/YOUR_LOCAL_DEV_FOLDER/nvim-svelte-snippets",
     dependencies = "L3MON4D3/LuaSnip",
     opts = {},
     dev = true
@@ -43,14 +43,14 @@ git clone https://github.com/nvim-svelte/svelte-snippets.nvim ~/projects/svelte-
 
 3. Reload the plugin after making changes:
    - Save your changes
-   - In Neovim, run: `:Lazy reload svelte-snippets.nvim`
+   - In Neovim, run: `:Lazy reload nvim-svelte-snippets`
    - Test in a .svelte file
 
 ## Available Snippets
 
-- `page`: Creates a new SvelteKit page component
-- `load`: Creates a load function (with choice of PageLoad or PageServerLoad)
-- `actions`: Creates form actions template
+- `sk-page`: Creates a new SvelteKit page component
+- `sk-load`: Creates a load function (with choice of PageLoad or PageServerLoad)
+- `sk-actions`: Creates form actions template
 - `each`: Creates a Svelte each block
 
 ## Keybindings
