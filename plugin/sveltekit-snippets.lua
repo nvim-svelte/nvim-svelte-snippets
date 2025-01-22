@@ -1,0 +1,1 @@
+require("sveltekit-snippets").setup()
