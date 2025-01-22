@@ -1,4 +1,3 @@
--- lua/sveltekit-snippets/init.lua
 local M = {}
 
 -- Default configuration
@@ -66,17 +65,15 @@ function M.setup(opts)
 
 	-- Only load snippets if enabled and (auto_detect is off or we're in a SvelteKit project)
 	if M.config.enabled and (not M.config.auto_detect or is_sveltekit_project()) then
-		require("nvim-svelte-snippets.svelte").setup(M.config)
-		require("nvim-svelte-snippets.server").setup(M.config)
-		require("nvim-svelte-snippets.client").setup(M.config)
+		require("nvim-svelte-snippets.svelte").setup()
+		require("nvim-svelte-snippets.typescript").setup(M.config)
 	end
 end
 
 function M.reload_snippets()
 	if M.config.enabled and (not M.config.auto_detect or is_sveltekit_project()) then
-		require("nvim-svelte-snippets.svelte").setup(M.config)
-		require("nvim-svelte-snippets.server").setup(M.config)
-		require("nvim-svelte-snippets.client").setup(M.config)
+		require("nvim-svelte-snippets.svelte").setup()
+		require("nvim-svelte-snippets.typescript").setup(M.config)
 	end
 end
 
