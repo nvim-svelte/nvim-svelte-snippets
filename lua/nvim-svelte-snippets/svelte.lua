@@ -5,7 +5,7 @@ local M = {}
 local snippets = {
 	-- Page component
 	utils.create_snippet(
-		"sk-page",
+		"page",
 		utils.fmt(
 			[[
 <script lang="ts">

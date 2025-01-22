@@ -26,7 +26,7 @@ function M.update_snippet_triggers(snippets, prefix)
 	for _, snippet in ipairs(snippets) do
 		if snippet then
 			local new_snippet = vim.deepcopy(snippet)
-			new_snippet.trigger = prefix .. "_" .. snippet.trigger
+			new_snippet.trigger = prefix .. "-" .. snippet.trigger
 			table.insert(updated, new_snippet)
 		end
 	end

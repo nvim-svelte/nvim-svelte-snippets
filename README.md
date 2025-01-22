@@ -58,9 +58,9 @@ You can configure the plugin by passing options to the setup function:
 
 ### TypeScript Snippets (+page.ts/+page.server.ts)
 
-- `sk_load`: Creates a client-side load function
-- `sk_sload`: Creates a server-side load function
-- `sk_actions`: Creates form actions template
+- `sk-load`: Creates a client-side load function
+- `sk-sload`: Creates a server-side load function
+- `sk-actions`: Creates form actions template
 
 ## Keybindings
 

@@ -5,7 +5,7 @@ local M = {}
 local snippets = {
 	-- Server-side load function
 	utils.create_snippet(
-		"sk-load",
+		"load",
 		utils.fmt(
 			[[
 export const load = satisfies PageServerLoad(async ({}) => {{
@@ -25,7 +25,7 @@ export const load = satisfies PageServerLoad(async ({}) => {{
 	),
 	-- Form actions
 	utils.create_snippet(
-		"sk-actions",
+		"actions",
 		utils.fmt(
 			[[
 export const actions = {{
