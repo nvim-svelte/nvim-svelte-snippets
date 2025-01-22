@@ -2,50 +2,66 @@ local ls = require("luasnip")
 local utils = require("nvim-svelte-snippets.utils")
 local M = {}
 
--- Keep track of whether snippets have been loaded
 M.snippets_loaded = false
 
 local snippets = {
+  -- Layout load function
+  utils.s(
+    { trig = "lload", desc = "SvelteKit layout load function" },
+    utils.fmt(
+      [[
+import type {{ LayoutServerLoad }} from './$types';
+
+export const load: LayoutServerLoad = async ({{ {} }}) => {{
+    return {{
+        {}
+    }};
+}};
+]],
+      {
+        ls.insert_node(1, "/* parameters */"),
+        ls.insert_node(2, "/* return values */"),
+      }
+    )
+  ),
   -- Server-side load function
   utils.s(
     { trig = "sload", desc = "SvelteKit server load function" },
     utils.fmt(
       [[
-export const load = satisfies PageServerLoad(async ({}) => {{
-    {}
+import type {{ PageServerLoad }} from './$types';
+
+export const load: PageServerLoad = async ({{ {} }}) => {{
     return {{
         {}
     }};
-}});
+}};
 ]],
       {
-        utils.i(1, "params, fetch"),
-        utils.i(2, "// fetch your data here"),
-        utils.i(3, "prop: value"),
+        ls.insert_node(1, "/* parameters */"),
+        ls.insert_node(2, "/* return values */"),
       }
     )
   ),
-
   -- Client-side load function
   utils.s(
     { trig = "cload", desc = "SvelteKit client load function" },
     utils.fmt(
       [[
-export const load = satisfies PageLoad(async ({}) => {{
-    {}
+import type {{ PageLoad }} from './$types';
+
+export const load: PageLoad = ({{ {} }}) => {{
     return {{
         {}
     }};
-}});
+}};
 ]],
       {
-        utils.i(1, "params, fetch"),
-        utils.i(2, "// fetch your data here"),
-        utils.i(3, "prop: value"),
+        ls.insert_node(1, "/* parameters */"),
+        ls.insert_node(2, "/* return values */"),
       }
     )
   ),
-
   -- Form actions
   utils.s(
     { trig = "actions", desc = "SvelteKit form actions" },
@@ -61,15 +77,14 @@ export const actions = {{
 }};
 ]],
       {
-        utils.i(1, "const data = await request.formData();"),
-        utils.i(2, "success: true"),
+        ls.insert_node(1, "/* form data */"),
+        ls.insert_node(2, "/* return values */"),
       }
     )
   ),
 }
 
 function M.setup(config)
-  -- Prevent multiple loads
   if M.snippets_loaded then
     return
   end
@@ -77,7 +92,6 @@ function M.setup(config)
   local prefix = config and config.prefix or ""
   local processed_snippets = {}
 
-  -- Process each snippet
   for _, snippet in ipairs(snippets) do
     if snippet then
       local new_trigger = prefix and prefix ~= "" and (prefix .. "-" .. snippet.trigger) or snippet.trigger
@@ -87,10 +101,7 @@ function M.setup(config)
     end
   end
 
-  -- Add the processed snippets
   ls.add_snippets("typescript", processed_snippets)
-
-  -- Mark as loaded
   M.snippets_loaded = true
 end
 
