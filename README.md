@@ -55,7 +55,7 @@ git clone https://github.com/nvim-svelte/svelte-snippets.nvim ~/projects/svelte-
 
 ## Keybindings
 
-Default keybindings for navigating snippets:
+Default LuaSnip keybindings for navigating snippets:
 
 - `<Tab>`: Jump forward to next snippet position
 - `<S-Tab>`: Jump backward to previous snippet position
