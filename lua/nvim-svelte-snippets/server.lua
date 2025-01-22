@@ -46,8 +46,10 @@ export const actions = {{
 	),
 }
 
-function M.setup()
-	ls.add_snippets("typescript", snippets)
+function M.setup(config)
+	-- Use the utility function from utils
+	local processed_snippets = utils.update_snippet_triggers(snippets, config and config.prefix)
+	ls.add_snippets("typescript", processed_snippets)
 end
 
 return M

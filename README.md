@@ -16,9 +16,60 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 {
     "nvim-svelte/nvim-svelte-snippets",
     dependencies = "L3MON4D3/LuaSnip",
-    opts = {}
+    opts = {
+        -- your configuration comes here
+        -- or leave empty for defaults
+    }
 }
 ```
+
+## Configuration
+
+You can configure the plugin by passing options to the setup function:
+
+```lua
+{
+    "nvim-svelte/nvim-svelte-snippets",
+    dependencies = "L3MON4D3/LuaSnip",
+    opts = {
+        enabled = true,      -- Enable/disable snippets globally
+        auto_detect = true,  -- Only load in SvelteKit projects
+        prefix = "sk"        -- Prefix for TypeScript snippets (e.g., sk_load)
+    }
+}
+```
+
+### Configuration Options
+
+- `enabled`: Enable or disable snippets globally (default: `true`)
+- `auto_detect`: Only load snippets in detected SvelteKit projects (default: `true`)
+- `prefix`: Add prefix to TypeScript snippets (default: `"sk"`)
+
+### Commands
+
+- `:ToggleSvelteKitSnippets` - Toggle SvelteKit snippets on/off in TypeScript files
+
+## Available Snippets
+
+### Svelte Snippets (.svelte files)
+
+- `page`: Creates a new SvelteKit page component
+- `each`: Creates a Svelte each block
+
+### TypeScript Snippets (+page.ts/+page.server.ts)
+
+- `sk_load`: Creates a client-side load function
+- `sk_sload`: Creates a server-side load function
+- `sk_actions`: Creates form actions template
+
+## Keybindings
+
+Default LuaSnip keybindings for navigating snippets:
+
+- `<Tab>`: Jump forward to next snippet position
+- `<S-Tab>`: Jump backward to previous snippet position
+- `<C-n>`: Next choice in choice node
+- `<C-p>`: Previous choice in choice node
 
 ## Development
 
@@ -45,22 +96,6 @@ git clone https://github.com/nvim-svelte/nvim-svelte-snippets ~/projects/nvim-sv
    - Save your changes
    - In Neovim, run: `:Lazy reload nvim-svelte-snippets`
    - Test in a .svelte file
-
-## Available Snippets
-
-- `sk-page`: Creates a new SvelteKit page component
-- `sk-load`: Creates a load function (with choice of PageLoad or PageServerLoad)
-- `sk-actions`: Creates form actions template
-- `each`: Creates a Svelte each block
-
-## Keybindings
-
-Default LuaSnip keybindings for navigating snippets:
-
-- `<Tab>`: Jump forward to next snippet position
-- `<S-Tab>`: Jump backward to previous snippet position
-- `<C-n>`: Next choice in choice node
-- `<C-p>`: Previous choice in choice node
 
 ## License
 
