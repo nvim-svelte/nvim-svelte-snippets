@@ -34,7 +34,7 @@ You can configure the plugin by passing options to the setup function:
     opts = {
         enabled = true,      -- Enable/disable snippets globally
         auto_detect = true,  -- Only load in SvelteKit projects
-        prefix = "sk"        -- Prefix for TypeScript snippets (e.g., sk_load)
+        prefix = "sk"        -- Prefix for TypeScript snippets (e.g., sk-load)
     }
 }
 ```
