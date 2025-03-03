@@ -1,5 +1,7 @@
 # Svelte Snippets for Neovim
 
+** THIS ISN'T READY YET! WE ARE CURRENTLY WORKING ON THIS! **
+
 A collection of useful snippets for Svelte(Kit) development in Neovim using LuaSnip with TypeScript syntax.
 
 ## Prerequisites
