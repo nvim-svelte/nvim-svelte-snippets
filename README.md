@@ -34,7 +34,7 @@ You can configure the plugin by passing options to the setup function:
     opts = {
         enabled = true,      -- Enable/disable snippets globally
         auto_detect = true,  -- Only load in SvelteKit projects
-        prefix = "sk"        -- Prefix for TypeScript snippets (e.g., sk-load)
+        prefix = "kit"        -- Prefix for TypeScript snippets (e.g., kit-load)
     }
 }
 ```
@@ -67,12 +67,12 @@ You can configure the plugin by passing options to the setup function:
 
 All TypeScript snippets use the prefix configured in your settings (default: `sk-`)
 
-| Trigger            | Description                                          |
-| ------------------ | ---------------------------------------------------- |
-| `sk-load`          | Creates a load function with type choices            |
-| `sk-actions`       | Creates form actions template                        |
-| `sk-endpoint`      | Creates an endpoint handler with HTTP method choices |
-| `sk-param-matcher` | Creates a param matcher                              |
+| Trigger             | Description                                          |
+| ------------------- | ---------------------------------------------------- |
+| `kit-load`          | Creates a load function with type choices            |
+| `kit-actions`       | Creates form actions template                        |
+| `kit-endpoint`      | Creates an endpoint handler with HTTP method choices |
+| `kit-param-matcher` | Creates a param matcher                              |
 
 ## Keybindings
 
@@ -80,32 +80,6 @@ Default LuaSnip keybindings for navigating snippets:
 
 - `<Tab>`: Jump forward to next snippet position
 - `<S-Tab>`: Jump backward to previous snippet position
-
-## Development
-
-To develop and test the plugin locally:
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/nvim-svelte/nvim-svelte-snippets ~/YOUR_LOCAL_DEV_FOLDER/nvim-svelte-snippets
-```
-
-2. Add the local plugin to your Neovim config (in your lazy.nvim plugins setup):
-
-```lua
-{
-    dir = "~/YOUR_LOCAL_DEV_FOLDER/nvim-svelte-snippets",
-    dependencies = "L3MON4D3/LuaSnip",
-    opts = {},
-    dev = true
-}
-```
-
-3. Reload the plugin after making changes:
-   - Save your changes
-   - In Neovim, run: `:Lazy reload nvim-svelte-snippets`
-   - Test in a .svelte file
 
 ## Contributing
 
