@@ -56,7 +56,9 @@ export const load: {} = async ({}) => {{
 			trigger = "actions",
 			description = "SvelteKit form actions",
 			format = [[
-export const actions = {{
+import type {{ Actions }} from './$types';
+
+export const actions: Actions = {{
     default: async ({{ request }}) => {{
         {}
         return {{
@@ -71,24 +73,83 @@ export const actions = {{
 			},
 		},
 		{
-			trigger = "endpoint",
-			description = "SvelteKit endpoint handler",
+			trigger = "get",
+			description = "SvelteKit GET endpoint handler",
 			format = [[
-export const {}: RequestHandler = async ({}) => {{
+import type {{ RequestHandler }} from './$types';
+
+export const GET: RequestHandler = async ({}) => {{
     {}
     return new Response();
 }};
             ]],
 			nodes = {
-				utils.c(1, {
-					utils.t("GET"),
-					utils.t("POST"),
-					utils.t("PUT"),
-					utils.t("PATCH"),
-					utils.t("DELETE"),
-				}),
-				utils.i(2, "{ params, request }"),
-				utils.i(3, "// Handle request"),
+				utils.i(1, "{ params, request, url }"),
+				utils.i(2, "// Handle GET request"),
+			},
+		},
+		{
+			trigger = "post",
+			description = "SvelteKit POST endpoint handler",
+			format = [[
+import type {{ RequestHandler }} from './$types';
+
+export const POST: RequestHandler = async ({}) => {{
+    {}
+    return new Response();
+}};
+            ]],
+			nodes = {
+				utils.i(1, "{ params, request }"),
+				utils.i(2, "// Handle POST request"),
+			},
+		},
+		{
+			trigger = "put",
+			description = "SvelteKit PUT endpoint handler",
+			format = [[
+import type {{ RequestHandler }} from './$types';
+
+export const PUT: RequestHandler = async ({}) => {{
+    {}
+    return new Response();
+}};
+            ]],
+			nodes = {
+				utils.i(1, "{ params, request }"),
+				utils.i(2, "// Handle PUT request"),
+			},
+		},
+		{
+			trigger = "patch",
+			description = "SvelteKit PATCH endpoint handler",
+			format = [[
+import type {{ RequestHandler }} from './$types';
+
+export const PATCH: RequestHandler = async ({}) => {{
+    {}
+    return new Response();
+}};
+            ]],
+			nodes = {
+				utils.i(1, "{ params, request }"),
+				utils.i(2, "// Handle PATCH request"),
+			},
+		},
+		{
+			trigger = "delete",
+			description = "SvelteKit DELETE endpoint handler",
+			format = [[
+import type {{ RequestHandler }} from './$types';
+
+export const DELETE: RequestHandler = async ({}) => {{
+    {}
+    return new Response();
+}};
+            ]],
+			nodes = {
+				utils.i(1, "{ params, request }"),
+				utils.i(2, "// Handle DELETE request"),
 			},
 		},
 		{
