@@ -5,27 +5,52 @@ local M = {}
 M.snippets_loaded = false
 
 -- Function to determine load type based on file name
-local function get_load_type_node()
+local function get_load_data()
 	local filename = vim.fn.expand("%:t")
 
-	-- Create choice options based on file type
-	if filename:match("^%+page%.server%.ts$") then
-		return ls.text_node("PageServerLoad")
-	elseif filename:match("^%+page%.ts$") then
-		return ls.text_node("PageLoad")
-	elseif filename:match("^%+layout%.server%.ts$") then
-		return ls.text_node("LayoutServerLoad")
-	elseif filename:match("^%+layout%.ts$") then
-		return ls.text_node("LayoutLoad")
-	else
-		-- If we can't determine file type, give choices
-		return ls.choice_node(1, {
-			ls.text_node("PageLoad"),
-			ls.text_node("PageServerLoad"),
-			ls.text_node("LayoutLoad"),
-			ls.text_node("LayoutServerLoad"),
-		})
+	-- Debug info
+	print("Current filename: " .. filename)
+
+	-- Map of file patterns to load types
+	local file_types = {
+		["+page.server.ts"] = "PageServerLoad",
+		["+page.ts"] = "PageLoad",
+		["+layout.server.ts"] = "LayoutServerLoad",
+		["+layout.ts"] = "LayoutLoad",
+	}
+
+	-- Find the matching type
+	local load_type = nil
+	for pattern, type_name in pairs(file_types) do
+		if filename == pattern then
+			load_type = type_name
+			break
+		end
 	end
+
+	-- If we can't determine the type, default to PageServerLoad with choices
+	if not load_type then
+		return {
+			type_node = ls.choice_node(1, {
+				ls.text_node("PageServerLoad"),
+				ls.text_node("PageLoad"),
+				ls.text_node("LayoutServerLoad"),
+				ls.text_node("LayoutLoad"),
+			}),
+			import_type = ls.choice_node(1, {
+				ls.text_node("PageServerLoad"),
+				ls.text_node("PageLoad"),
+				ls.text_node("LayoutServerLoad"),
+				ls.text_node("LayoutLoad"),
+			}),
+		}
+	end
+
+	-- Return both the type node and import type
+	return {
+		type_node = ls.text_node(load_type),
+		import_type = ls.text_node(load_type),
+	}
 end
 
 -- Define TypeScript snippets in a clean table format
@@ -35,6 +60,8 @@ local function get_typescript_snippets()
 			trigger = "load",
 			description = "SvelteKit load function",
 			format = [[
+import type {{ {} }} from './$types';
+
 export const load: {} = async ({}) => {{
     {}
 
@@ -44,8 +71,10 @@ export const load: {} = async ({}) => {{
 }};
       ]],
 			nodes = function()
+				local load_data = get_load_data()
 				return {
-					get_load_type_node(),
+					load_data.import_type,
+					load_data.type_node,
 					ls.insert_node(2, "{ params, fetch }"),
 					ls.insert_node(3, "// Fetch your data"),
 					ls.insert_node(4, "prop: 'value'"),
@@ -108,10 +137,25 @@ export const match: ParamMatcher = (param) => {{
 	}
 end
 
+-- debugging ugh
+-- local function debug_file_detection()
+-- 	-- Create autocmd to print filename when entering TypeScript files
+-- 	vim.api.nvim_create_autocmd({ "BufEnter" }, {
+-- 		pattern = { "*.ts" },
+-- 		callback = function()
+-- 			local filename = vim.fn.expand("%:t")
+-- 			print("Detected file: " .. filename)
+-- 		end,
+-- 	})
+-- end
+--
 function M.setup(config)
 	if M.snippets_loaded then
 		return
 	end
+
+	-- Enable debug if needed
+	-- debug_file_detection()
 
 	local prefix = config and config.prefix or ""
 	local processed_snippets = {}
