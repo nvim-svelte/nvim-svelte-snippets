@@ -84,12 +84,16 @@ When enabled, the plugin:
 
 All TypeScript snippets use the prefix configured in your settings (default: `kit-`)
 
-| Trigger             | Description                                          |
-| ------------------- | ---------------------------------------------------- |
-| `kit-load`          | Creates a load function with type choices            |
-| `kit-actions`       | Creates form actions template                        |
-| `kit-endpoint`      | Creates an endpoint handler with HTTP method choices |
-| `kit-param-matcher` | Creates a param matcher                              |
+| Trigger             | Description                                     |
+| ------------------- | ----------------------------------------------- |
+| `kit-load`          | Creates a load function with auto-detected type |
+| `kit-actions`       | Creates form actions template with proper types |
+| `kit-get`           | Creates a GET endpoint handler                  |
+| `kit-post`          | Creates a POST endpoint handler                 |
+| `kit-put`           | Creates a PUT endpoint handler                  |
+| `kit-patch`         | Creates a PATCH endpoint handler                |
+| `kit-delete`        | Creates a DELETE endpoint handler               |
+| `kit-param-matcher` | Creates a param matcher                         |
 
 ## Keybindings
 
