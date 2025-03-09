@@ -2,6 +2,8 @@
 
 A collection of useful snippets for Svelte(Kit) development in Neovim using LuaSnip with TypeScript support.
 
+_disclaimer: this plugin is in development, so not all features work correctly and things might change before official launch_
+
 ## Prerequisites
 
 - Neovim >= 0.9.0
