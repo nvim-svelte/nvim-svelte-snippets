@@ -34,7 +34,7 @@ local function get_load_data()
 				utils.t("LayoutServerLoad"),
 				utils.t("LayoutLoad"),
 			}),
-			import_type = utils.c(1, {
+			import_type = utils.c(2, {
 				utils.t("PageServerLoad"),
 				utils.t("PageLoad"),
 				utils.t("LayoutServerLoad"),
@@ -72,9 +72,9 @@ export const load: {} = async ({}) => {{
 				return {
 					load_data.import_type,
 					load_data.type_node,
-					utils.i(2, "{ params, fetch }"),
-					utils.i(3, "// Fetch your data"),
-					utils.i(4, "prop: 'value'"),
+					utils.i(3, "{ params, fetch }"),
+					utils.i(4, "// Fetch your data"),
+					utils.i(5, "prop: 'value'"),
 				}
 			end,
 		},
