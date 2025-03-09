@@ -98,9 +98,4 @@ function M.reload_snippets()
 	end
 end
 
--- Create an autocommand to run when entering TypeScript files
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-	pattern = { "*.ts" },
-})
-
 return M
