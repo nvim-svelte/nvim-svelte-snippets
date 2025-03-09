@@ -4,48 +4,27 @@ local M = {}
 
 M.snippets_loaded = false
 
--- Create a dynamic node that handles load type detection at expansion time
-local function create_dynamic_load_type()
-	return utils.d(1, function()
-		local filename = vim.fn.expand("%:t")
-		vim.notify("Current filename for load detection: " .. filename)
+-- Function node to determine the load type based on filename
+local function detect_load_type(_, _)
+	local filename = vim.fn.expand("%:t")
 
-		-- Map of file patterns to load types
-		local file_types = {
-			["+page.server.ts"] = "PageServerLoad",
-			["+page.ts"] = "PageLoad",
-			["+layout.server.ts"] = "LayoutServerLoad",
-			["+layout.ts"] = "LayoutLoad",
-		}
+	-- Map of file patterns to load types
+	local file_types = {
+		["+page.server.ts"] = "PageServerLoad",
+		["+page.ts"] = "PageLoad",
+		["+layout.server.ts"] = "LayoutServerLoad",
+		["+layout.ts"] = "LayoutLoad",
+	}
 
-		-- Find the matching type
-		local load_type = nil
-		for pattern, type_name in pairs(file_types) do
-			if filename:match(pattern) then
-				load_type = type_name
-				vim.notify("Detected load type: " .. type_name)
-				break
-			end
+	-- Find the matching type
+	for pattern, type_name in pairs(file_types) do
+		if filename == pattern then
+			return type_name
 		end
+	end
 
-		-- If we can't determine the type, return a choice node
-		if not load_type then
-			vim.notify("Could not detect load type from filename, providing choices")
-			return utils.sn(nil, {
-				utils.c(1, {
-					utils.t("PageServerLoad"),
-					utils.t("PageLoad"),
-					utils.t("LayoutServerLoad"),
-					utils.t("LayoutLoad"),
-				}),
-			})
-		end
-
-		-- Return a snippet node with the determined type
-		return utils.sn(nil, {
-			utils.t(load_type),
-		})
-	end)
+	-- Default type if we can't determine
+	return "PageServerLoad"
 end
 
 -- Define TypeScript snippets in a clean table format
@@ -54,11 +33,7 @@ local function get_typescript_snippets()
 		{
 			trigger = "load",
 			description = "SvelteKit load function (auto-detects type from filename)",
-			nodes = function()
-				local load_type = create_dynamic_load_type()
-
-				return utils.fmt(
-					[[
+			format = [[
 import type {{ {} }} from './$types';
 
 export const load: {} = async ({}) => {{
@@ -67,16 +42,15 @@ export const load: {} = async ({}) => {{
     return {{
         {}
     }};
-}};]],
-					{
-						load_type, -- Will be dynamically determined
-						load_type, -- Same as above
-						utils.i(2, "{ params, fetch }"),
-						utils.i(3, "// Fetch your data"),
-						utils.i(4, "prop: 'value'"),
-					}
-				)
-			end,
+}};
+            ]],
+			nodes = {
+				utils.f(detect_load_type, {}), -- Function node for import type
+				utils.f(detect_load_type, {}), -- Function node for load type
+				utils.i(1, "{ params, fetch }"),
+				utils.i(2, "// Fetch your data"),
+				utils.i(3, "prop: 'value'"),
+			},
 		},
 		{
 			trigger = "actions",
@@ -145,16 +119,9 @@ function M.setup(config)
 	for _, snippet_def in ipairs(get_typescript_snippets()) do
 		local trigger = prefix and prefix ~= "" and (prefix .. "-" .. snippet_def.trigger) or snippet_def.trigger
 
-		-- Create the snippet using different approaches depending on node type
-		local snippet
-		if type(snippet_def.nodes) == "function" then
-			-- For dynamic nodes (like load function)
-			snippet = utils.s({ trig = trigger, desc = snippet_def.description }, snippet_def.nodes())
-		else
-			-- For static nodes
-			snippet =
-				utils.create_snippet(trigger, utils.fmt(snippet_def.format, snippet_def.nodes), snippet_def.description)
-		end
+		-- Create the snippet with proper formatting
+		local snippet =
+			utils.create_snippet(trigger, utils.fmt(snippet_def.format, snippet_def.nodes), snippet_def.description)
 
 		table.insert(processed_snippets, snippet)
 	end
