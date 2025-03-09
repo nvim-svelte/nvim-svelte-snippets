@@ -47,6 +47,10 @@ When enabled, the plugin:
 - Only loads TypeScript snippets for `.ts` files in SvelteKit projects (when `auto_detect` is true)
 - Can be configured to load TypeScript snippets in any project by setting `auto_detect` to false
 
+### Load Functions
+
+https://github.com/user-attachments/assets/c333ca83-418f-4008-8259-ef825e80876c
+
 ### Configuration Options
 
 - `enabled`: Enable or disable all snippets globally (default: `true`)
