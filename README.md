@@ -37,7 +37,14 @@ You can configure the plugin by passing options to the setup function:
         prefix = "kit"       -- Prefix for TypeScript snippets (e.g., kit-load)
     }
 }
+
 ```
+
+## Demos
+
+### Load Functions
+
+https://github.com/user-attachments/assets/1e475ee6-d00d-4360-ba2b-3254bd8c1c3b
 
 ## How It Works
 
@@ -46,10 +53,6 @@ When enabled, the plugin:
 - Always loads Svelte snippets for `.svelte` files in any project
 - Only loads TypeScript snippets for `.ts` files in SvelteKit projects (when `auto_detect` is true)
 - Can be configured to load TypeScript snippets in any project by setting `auto_detect` to false
-
-### Load Functions
-
-https://github.com/user-attachments/assets/1e475ee6-d00d-4360-ba2b-3254bd8c1c3b
 
 ### Configuration Options
 
