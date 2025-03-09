@@ -8,9 +8,6 @@ M.snippets_loaded = false
 local function get_load_data()
 	local filename = vim.fn.expand("%:t")
 
-	-- Debug info
-	print("Current filename: " .. filename)
-
 	-- Map of file patterns to load types
 	local file_types = {
 		["+page.server.ts"] = "PageServerLoad",
@@ -28,28 +25,28 @@ local function get_load_data()
 		end
 	end
 
-	-- If we can't determine the type, default to PageServerLoad with choices
+	-- If we can't determine the type, return choice nodes properly
 	if not load_type then
 		return {
-			type_node = ls.choice_node(1, {
-				ls.text_node("PageServerLoad"),
-				ls.text_node("PageLoad"),
-				ls.text_node("LayoutServerLoad"),
-				ls.text_node("LayoutLoad"),
+			type_node = utils.c(1, {
+				utils.t("PageServerLoad"),
+				utils.t("PageLoad"),
+				utils.t("LayoutServerLoad"),
+				utils.t("LayoutLoad"),
 			}),
-			import_type = ls.choice_node(1, {
-				ls.text_node("PageServerLoad"),
-				ls.text_node("PageLoad"),
-				ls.text_node("LayoutServerLoad"),
-				ls.text_node("LayoutLoad"),
+			import_type = utils.c(1, {
+				utils.t("PageServerLoad"),
+				utils.t("PageLoad"),
+				utils.t("LayoutServerLoad"),
+				utils.t("LayoutLoad"),
 			}),
 		}
 	end
 
 	-- Return both the type node and import type
 	return {
-		type_node = ls.text_node(load_type),
-		import_type = ls.text_node(load_type),
+		type_node = utils.t(load_type),
+		import_type = utils.t(load_type),
 	}
 end
 
@@ -75,9 +72,9 @@ export const load: {} = async ({}) => {{
 				return {
 					load_data.import_type,
 					load_data.type_node,
-					ls.insert_node(2, "{ params, fetch }"),
-					ls.insert_node(3, "// Fetch your data"),
-					ls.insert_node(4, "prop: 'value'"),
+					utils.i(2, "{ params, fetch }"),
+					utils.i(3, "// Fetch your data"),
+					utils.i(4, "prop: 'value'"),
 				}
 			end,
 		},
@@ -95,8 +92,8 @@ export const actions = {{
 }};
       ]],
 			nodes = {
-				ls.insert_node(1, "/* form data */"),
-				ls.insert_node(2, "/* return values */"),
+				utils.i(1, "/* form data */"),
+				utils.i(2, "/* return values */"),
 			},
 		},
 		{
@@ -109,15 +106,15 @@ export const {}: RequestHandler = async ({}) => {{
 }};
       ]],
 			nodes = {
-				ls.choice_node(1, {
-					ls.text_node("GET"),
-					ls.text_node("POST"),
-					ls.text_node("PUT"),
-					ls.text_node("PATCH"),
-					ls.text_node("DELETE"),
+				utils.c(1, {
+					utils.t("GET"),
+					utils.t("POST"),
+					utils.t("PUT"),
+					utils.t("PATCH"),
+					utils.t("DELETE"),
 				}),
-				ls.insert_node(2, "{ params, request }"),
-				ls.insert_node(3, "// Handle request"),
+				utils.i(2, "{ params, request }"),
+				utils.i(3, "// Handle request"),
 			},
 		},
 		{
@@ -131,31 +128,16 @@ export const match: ParamMatcher = (param) => {{
 }};
       ]],
 			nodes = {
-				ls.insert_node(1, "param.length > 0"),
+				utils.i(1, "param.length > 0"),
 			},
 		},
 	}
 end
 
--- debugging ugh
--- local function debug_file_detection()
--- 	-- Create autocmd to print filename when entering TypeScript files
--- 	vim.api.nvim_create_autocmd({ "BufEnter" }, {
--- 		pattern = { "*.ts" },
--- 		callback = function()
--- 			local filename = vim.fn.expand("%:t")
--- 			print("Detected file: " .. filename)
--- 		end,
--- 	})
--- end
---
 function M.setup(config)
 	if M.snippets_loaded then
 		return
 	end
-
-	-- Enable debug if needed
-	-- debug_file_detection()
 
 	local prefix = config and config.prefix or ""
 	local processed_snippets = {}
@@ -168,14 +150,11 @@ function M.setup(config)
 		if type(snippet_def.nodes) == "function" then
 			-- For dynamic nodes (like load function)
 			local nodes = snippet_def.nodes()
-			snippet =
-				ls.snippet({ trig = trigger, desc = snippet_def.description }, utils.fmt(snippet_def.format, nodes))
+			snippet = utils.create_snippet(trigger, utils.fmt(snippet_def.format, nodes), snippet_def.description)
 		else
 			-- For static nodes
-			snippet = ls.snippet(
-				{ trig = trigger, desc = snippet_def.description },
-				utils.fmt(snippet_def.format, snippet_def.nodes)
-			)
+			snippet =
+				utils.create_snippet(trigger, utils.fmt(snippet_def.format, snippet_def.nodes), snippet_def.description)
 		end
 
 		table.insert(processed_snippets, snippet)
