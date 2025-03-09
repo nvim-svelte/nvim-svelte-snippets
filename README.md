@@ -34,16 +34,24 @@ You can configure the plugin by passing options to the setup function:
     opts = {
         enabled = true,      -- Enable/disable snippets globally
         auto_detect = true,  -- Only load in SvelteKit projects
-        prefix = "kit"        -- Prefix for TypeScript snippets (e.g., kit-load)
+        prefix = "kit"       -- Prefix for TypeScript snippets (e.g., kit-load)
     }
 }
 ```
 
+## How It Works
+
+When enabled, the plugin:
+
+- Always loads Svelte snippets for `.svelte` files in any project
+- Only loads TypeScript snippets for `.ts` files in SvelteKit projects (when `auto_detect` is true)
+- Can be configured to load TypeScript snippets in any project by setting `auto_detect` to false
+
 ### Configuration Options
 
-- `enabled`: Enable or disable snippets globally (default: `true`)
-- `auto_detect`: Only load SvelteKit-specific TypeScript snippets in detected SvelteKit projects (default: `true`). Svelte snippets are always loaded for `.svelte` files regardless of this setting.
-- `prefix`: Add prefix to TypeScript snippets (default: `"sk"`)
+- `enabled`: Enable or disable all snippets globally (default: `true`)
+- `auto_detect`: When true, only loads SvelteKit TypeScript snippets in detected SvelteKit projects (default: `true`). Svelte snippets for `.svelte` files are always loaded regardless of this setting.
+- `prefix`: Add prefix to TypeScript snippets (default: `"kit"`)
 
 ### Commands
 
@@ -63,9 +71,9 @@ You can configure the plugin by passing options to the setup function:
 | `key`        | Creates a Svelte key block                       |
 | `snippet`    | Creates a Svelte snippet block (Svelte 5)        |
 
-### TypeScript Snippets (+page.ts/+page.server.ts)
+### TypeScript Snippets (SvelteKit route files)
 
-All TypeScript snippets use the prefix configured in your settings (default: `sk-`)
+All TypeScript snippets use the prefix configured in your settings (default: `kit-`)
 
 | Trigger             | Description                                          |
 | ------------------- | ---------------------------------------------------- |
@@ -83,7 +91,7 @@ Default LuaSnip keybindings for navigating snippets:
 
 ## Contributing
 
-Contributions are welcome! Feel free to submit a PR to add more snippets or improve existing ones.
+Contributions are welcome! See the [CONTRIBUTING.md](CONTRIBUTING.md) file for development instructions.
 
 ## License
 
