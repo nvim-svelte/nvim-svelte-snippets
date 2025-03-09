@@ -1,8 +1,6 @@
 # Svelte Snippets for Neovim
 
-** THIS ISN'T READY YET! WE ARE CURRENTLY WORKING ON THIS! **
-
-A collection of useful snippets for Svelte(Kit) development in Neovim using LuaSnip with TypeScript syntax.
+A collection of useful snippets for Svelte(Kit) development in Neovim using LuaSnip with TypeScript support.
 
 ## Prerequisites
 
@@ -44,7 +42,7 @@ You can configure the plugin by passing options to the setup function:
 ### Configuration Options
 
 - `enabled`: Enable or disable snippets globally (default: `true`)
-- `auto_detect`: Only load snippets in detected SvelteKit projects (default: `true`)
+- `auto_detect`: Only load SvelteKit-specific TypeScript snippets in detected SvelteKit projects (default: `true`). Svelte snippets are always loaded for `.svelte` files regardless of this setting.
 - `prefix`: Add prefix to TypeScript snippets (default: `"sk"`)
 
 ### Commands
@@ -55,14 +53,26 @@ You can configure the plugin by passing options to the setup function:
 
 ### Svelte Snippets (.svelte files)
 
-- `page`: Creates a new SvelteKit page component
-- `each`: Creates a Svelte each block
+| Trigger      | Description                                      |
+| ------------ | ------------------------------------------------ |
+| `page`       | Creates a new SvelteKit page component           |
+| `if`         | Creates a Svelte if block                        |
+| `each`       | Creates a Svelte each block                      |
+| `await`      | Creates a complete Svelte await block            |
+| `await-then` | Creates a Svelte await block with then shorthand |
+| `key`        | Creates a Svelte key block                       |
+| `snippet`    | Creates a Svelte snippet block (Svelte 5)        |
 
 ### TypeScript Snippets (+page.ts/+page.server.ts)
 
-- `sk-cload`: Creates a client-side load function
-- `sk-sload`: Creates a server-side load function
-- `sk-actions`: Creates form actions template
+All TypeScript snippets use the prefix configured in your settings (default: `sk-`)
+
+| Trigger            | Description                                          |
+| ------------------ | ---------------------------------------------------- |
+| `sk-load`          | Creates a load function with type choices            |
+| `sk-actions`       | Creates form actions template                        |
+| `sk-endpoint`      | Creates an endpoint handler with HTTP method choices |
+| `sk-param-matcher` | Creates a param matcher                              |
 
 ## Keybindings
 
@@ -70,8 +80,6 @@ Default LuaSnip keybindings for navigating snippets:
 
 - `<Tab>`: Jump forward to next snippet position
 - `<S-Tab>`: Jump backward to previous snippet position
-- `<C-n>`: Next choice in choice node
-- `<C-p>`: Previous choice in choice node
 
 ## Development
 
@@ -98,6 +106,10 @@ git clone https://github.com/nvim-svelte/nvim-svelte-snippets ~/YOUR_LOCAL_DEV_F
    - Save your changes
    - In Neovim, run: `:Lazy reload nvim-svelte-snippets`
    - Test in a .svelte file
+
+## Contributing
+
+Contributions are welcome! Feel free to submit a PR to add more snippets or improve existing ones.
 
 ## License
 

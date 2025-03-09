@@ -1,3 +1,4 @@
+-- lua/nvim-svelte-snippets/init.lua
 local M = {}
 
 -- Default configuration
@@ -18,7 +19,7 @@ local function is_sveltekit_project()
 		return false
 	end
 
-	-- Add nil checks for file operations
+	-- Check package.json for @sveltejs/kit
 	local package_json_exists = file_exists("package.json")
 	if package_json_exists then
 		local f = io.open("package.json", "r")
@@ -49,6 +50,16 @@ local function is_sveltekit_project()
 	return false
 end
 
+-- Load Svelte snippets (for .svelte files)
+local function load_svelte_snippets()
+	require("nvim-svelte-snippets.svelte").setup()
+end
+
+-- Load TypeScript snippets (for SvelteKit functionality)
+local function load_sveltekit_snippets(config)
+	require("nvim-svelte-snippets.typescript").setup(config)
+end
+
 function M.setup(opts)
 	-- Merge user config with defaults
 	if opts then
@@ -63,17 +74,28 @@ function M.setup(opts)
 		M.reload_snippets()
 	end, {})
 
-	-- Only load snippets if enabled and (auto_detect is off or we're in a SvelteKit project)
+	-- Always load Svelte snippets if enabled
+	if M.config.enabled then
+		load_svelte_snippets()
+	end
+
+	-- Only load SvelteKit-specific snippets if enabled and
+	-- (auto_detect is off or we're in a SvelteKit project)
 	if M.config.enabled and (not M.config.auto_detect or is_sveltekit_project()) then
-		require("nvim-svelte-snippets.svelte").setup()
-		require("nvim-svelte-snippets.typescript").setup(M.config)
+		load_sveltekit_snippets(M.config)
 	end
 end
 
 function M.reload_snippets()
+	-- Always reload Svelte snippets if enabled
+	if M.config.enabled then
+		load_svelte_snippets()
+	end
+
+	-- Only reload SvelteKit-specific snippets if enabled and
+	-- (auto_detect is off or we're in a SvelteKit project)
 	if M.config.enabled and (not M.config.auto_detect or is_sveltekit_project()) then
-		require("nvim-svelte-snippets.svelte").setup()
-		require("nvim-svelte-snippets.typescript").setup(M.config)
+		load_sveltekit_snippets(M.config)
 	end
 end
 

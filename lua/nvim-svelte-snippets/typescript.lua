@@ -1,72 +1,40 @@
+-- lua/nvim-svelte-snippets/typescript.lua
 local ls = require("luasnip")
 local utils = require("nvim-svelte-snippets.utils")
 local M = {}
 
 M.snippets_loaded = false
 
-local snippets = {
-  -- Layout load function
-  utils.s(
-    { trig = "lload", desc = "SvelteKit layout load function" },
-    utils.fmt(
-      [[
-import type {{ LayoutServerLoad }} from './$types';
+-- Define TypeScript snippets in a clean table format
+local typescript_snippets = {
+	{
+		trigger = "load",
+		description = "SvelteKit load function",
+		format = [[
+export const load: {} = async ({}) => {{
+    {}
 
-export const load: LayoutServerLoad = async ({{ {} }}) => {{
     return {{
         {}
     }};
 }};
-]],
-      {
-        ls.insert_node(1, "/* parameters */"),
-        ls.insert_node(2, "/* return values */"),
-      }
-    )
-  ),
-  -- Server-side load function
-  utils.s(
-    { trig = "sload", desc = "SvelteKit server load function" },
-    utils.fmt(
-      [[
-import type {{ PageServerLoad }} from './$types';
-
-export const load: PageServerLoad = async ({{ {} }}) => {{
-    return {{
-        {}
-    }};
-}};
-]],
-      {
-        ls.insert_node(1, "/* parameters */"),
-        ls.insert_node(2, "/* return values */"),
-      }
-    )
-  ),
-  -- Client-side load function
-  utils.s(
-    { trig = "cload", desc = "SvelteKit client load function" },
-    utils.fmt(
-      [[
-import type {{ PageLoad }} from './$types';
-
-export const load: PageLoad = ({{ {} }}) => {{
-    return {{
-        {}
-    }};
-}};
-]],
-      {
-        ls.insert_node(1, "/* parameters */"),
-        ls.insert_node(2, "/* return values */"),
-      }
-    )
-  ),
-  -- Form actions
-  utils.s(
-    { trig = "actions", desc = "SvelteKit form actions" },
-    utils.fmt(
-      [[
+    ]],
+		nodes = {
+			ls.choice_node(1, {
+				ls.text_node("PageLoad"),
+				ls.text_node("PageServerLoad"),
+				ls.text_node("LayoutLoad"),
+				ls.text_node("LayoutServerLoad"),
+			}),
+			ls.insert_node(2, "{ params, fetch }"),
+			ls.insert_node(3, "// Fetch your data"),
+			ls.insert_node(4, "prop: 'value'"),
+		},
+	},
+	{
+		trigger = "actions",
+		description = "SvelteKit form actions",
+		format = [[
 export const actions = {{
     default: async ({{ request }}) => {{
         {}
@@ -75,34 +43,71 @@ export const actions = {{
         }};
     }}
 }};
-]],
-      {
-        ls.insert_node(1, "/* form data */"),
-        ls.insert_node(2, "/* return values */"),
-      }
-    )
-  ),
+    ]],
+		nodes = {
+			ls.insert_node(1, "/* form data */"),
+			ls.insert_node(2, "/* return values */"),
+		},
+	},
+	{
+		trigger = "endpoint",
+		description = "SvelteKit endpoint handler",
+		format = [[
+export const {}: RequestHandler = async ({}) => {{
+    {}
+    return new Response();
+}};
+    ]],
+		nodes = {
+			ls.choice_node(1, {
+				ls.text_node("GET"),
+				ls.text_node("POST"),
+				ls.text_node("PUT"),
+				ls.text_node("PATCH"),
+				ls.text_node("DELETE"),
+			}),
+			ls.insert_node(2, "{ params, request }"),
+			ls.insert_node(3, "// Handle request"),
+		},
+	},
+	{
+		trigger = "param-matcher",
+		description = "SvelteKit param matcher",
+		format = [[
+import type {{ ParamMatcher }} from '@sveltejs/kit';
+
+export const match: ParamMatcher = (param) => {{
+    return {};
+}};
+    ]],
+		nodes = {
+			ls.insert_node(1, "param.length > 0"),
+		},
+	},
 }
 
 function M.setup(config)
-  if M.snippets_loaded then
-    return
-  end
+	if M.snippets_loaded then
+		return
+	end
 
-  local prefix = config and config.prefix or ""
-  local processed_snippets = {}
+	local prefix = config and config.prefix or ""
+	local processed_snippets = {}
 
-  for _, snippet in ipairs(snippets) do
-    if snippet then
-      local new_trigger = prefix and prefix ~= "" and (prefix .. "-" .. snippet.trigger) or snippet.trigger
-      local new_snippet = vim.deepcopy(snippet)
-      new_snippet.trigger = new_trigger
-      table.insert(processed_snippets, new_snippet)
-    end
-  end
+	for _, snippet_def in ipairs(typescript_snippets) do
+		local trigger = prefix and prefix ~= "" and (prefix .. "-" .. snippet_def.trigger) or snippet_def.trigger
 
-  ls.add_snippets("typescript", processed_snippets)
-  M.snippets_loaded = true
+		table.insert(
+			processed_snippets,
+			ls.snippet(
+				{ trig = trigger, desc = snippet_def.description },
+				utils.fmt(snippet_def.format, snippet_def.nodes)
+			)
+		)
+	end
+
+	ls.add_snippets("typescript", processed_snippets)
+	M.snippets_loaded = true
 end
 
 return M
