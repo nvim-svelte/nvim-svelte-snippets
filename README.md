@@ -49,7 +49,7 @@ When enabled, the plugin:
 
 ### Load Functions
 
-https://github.com/user-attachments/assets/c333ca83-418f-4008-8259-ef825e80876c
+https://github.com/user-attachments/assets/1e475ee6-d00d-4360-ba2b-3254bd8c1c3b
 
 ### Configuration Options
 
