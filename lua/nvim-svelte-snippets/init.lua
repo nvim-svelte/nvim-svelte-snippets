@@ -98,30 +98,9 @@ function M.reload_snippets()
 	end
 end
 
--- Function to log file detection information
-local function log_file_info()
-	local filename = vim.fn.expand("%:t")
-	local filetype = vim.bo.filetype
-	local fullpath = vim.fn.expand("%:p")
-
-	print("========== File Info ==========")
-	print("Filename: " .. filename)
-	print("Filetype: " .. filetype)
-	print("Full path: " .. fullpath)
-	print("===============================")
-end
-
 -- Create an autocommand to run when entering TypeScript files
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
 	pattern = { "*.ts" },
-	callback = function()
-		log_file_info()
-	end,
 })
-
--- You can also create a user command to check file info on demand
-vim.api.nvim_create_user_command("LogFileInfo", function()
-	log_file_info()
-end, {})
 
 return M
