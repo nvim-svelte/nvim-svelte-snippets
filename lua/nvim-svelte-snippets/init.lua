@@ -1,4 +1,3 @@
--- lua/nvim-svelte-snippets/init.lua
 local M = {}
 
 -- Default configuration
