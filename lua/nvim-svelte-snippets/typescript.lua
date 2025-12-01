@@ -4,7 +4,6 @@ local M = {}
 
 M.snippets_loaded = false
 
--- Function node to determine the load type based on filename
 local function detect_load_type(_, _)
 	local filename = vim.fn.expand("%:t")
 
@@ -44,13 +43,15 @@ export const load: {} = async ({}) => {{
     }};
 }};
             ]],
-			nodes = {
-				utils.f(detect_load_type, {}), -- Function node for import type
-				utils.f(detect_load_type, {}), -- Function node for load type
-				utils.i(1, "{ params, fetch }"),
-				utils.i(2, "// Fetch your data"),
-				utils.i(3, "prop: 'value'"),
-			},
+			nodes = function()
+				return {
+					utils.f(detect_load_type),
+					utils.f(detect_load_type),
+					utils.i(1, "{ params, fetch }"),
+					utils.i(2, "// Fetch your data"),
+					utils.i(3, "prop: 'value'"),
+				}
+			end,
 		},
 		{
 			trigger = "actions",
@@ -67,10 +68,12 @@ export const actions: Actions = {{
     }}
 }};
             ]],
-			nodes = {
-				utils.i(1, "/* form data */"),
-				utils.i(2, "/* return values */"),
-			},
+			nodes = function()
+				return {
+					utils.i(1, "/* form data */"),
+					utils.i(2, "/* return values */"),
+				}
+			end,
 		},
 		{
 			trigger = "get",
@@ -83,10 +86,12 @@ export const GET: RequestHandler = async ({}) => {{
     return new Response();
 }};
             ]],
-			nodes = {
-				utils.i(1, "{ params, request, url }"),
-				utils.i(2, "// Handle GET request"),
-			},
+			nodes = function()
+				return {
+					utils.i(1, "{ params, request, url }"),
+					utils.i(2, "// Handle GET request"),
+				}
+			end,
 		},
 		{
 			trigger = "post",
@@ -99,10 +104,12 @@ export const POST: RequestHandler = async ({}) => {{
     return new Response();
 }};
             ]],
-			nodes = {
-				utils.i(1, "{ params, request }"),
-				utils.i(2, "// Handle POST request"),
-			},
+			nodes = function()
+				return {
+					utils.i(1, "{ params, request }"),
+					utils.i(2, "// Handle POST request"),
+				}
+			end,
 		},
 		{
 			trigger = "put",
@@ -115,10 +122,12 @@ export const PUT: RequestHandler = async ({}) => {{
     return new Response();
 }};
             ]],
-			nodes = {
-				utils.i(1, "{ params, request }"),
-				utils.i(2, "// Handle PUT request"),
-			},
+			nodes = function()
+				return {
+					utils.i(1, "{ params, request }"),
+					utils.i(2, "// Handle PUT request"),
+				}
+			end,
 		},
 		{
 			trigger = "patch",
@@ -131,10 +140,12 @@ export const PATCH: RequestHandler = async ({}) => {{
     return new Response();
 }};
             ]],
-			nodes = {
-				utils.i(1, "{ params, request }"),
-				utils.i(2, "// Handle PATCH request"),
-			},
+			nodes = function()
+				return {
+					utils.i(1, "{ params, request }"),
+					utils.i(2, "// Handle PATCH request"),
+				}
+			end,
 		},
 		{
 			trigger = "delete",
@@ -147,10 +158,12 @@ export const DELETE: RequestHandler = async ({}) => {{
     return new Response();
 }};
             ]],
-			nodes = {
-				utils.i(1, "{ params, request }"),
-				utils.i(2, "// Handle DELETE request"),
-			},
+			nodes = function()
+				return {
+					utils.i(1, "{ params, request }"),
+					utils.i(2, "// Handle DELETE request"),
+				}
+			end,
 		},
 		{
 			trigger = "param-matcher",
@@ -162,9 +175,11 @@ export const match: ParamMatcher = (param) => {{
     return {};
 }};
             ]],
-			nodes = {
-				utils.i(1, "param.length > 0"),
-			},
+			nodes = function()
+				return {
+					utils.i(1, "param.length > 0"),
+				}
+			end,
 		},
 	}
 end
@@ -181,8 +196,11 @@ function M.setup(config)
 		local trigger = prefix and prefix ~= "" and (prefix .. "-" .. snippet_def.trigger) or snippet_def.trigger
 
 		-- Create the snippet with proper formatting
-		local snippet =
-			utils.create_snippet(trigger, utils.fmt(snippet_def.format, snippet_def.nodes), snippet_def.description)
+		local snippet = utils.create_snippet(
+			trigger,
+			utils.fmt(snippet_def.format, snippet_def.nodes()),
+			snippet_def.description
+		)
 
 		table.insert(processed_snippets, snippet)
 	end
